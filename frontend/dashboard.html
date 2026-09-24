@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card">
+    <h1>Dashboard</h1>
+    <p id="profile">Loading profile...</p>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+const API_URL = "http://localhost:5000";
+const token = localStorage.getItem("token");
+
+if (!token) {
+    window.location.href = "index.html";
+}
+
+async function loadProfile() {
+    try {
+        const response = await fetch(`${API_URL}/api/profile`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+            return;
+        }
+
+        const user = await response.json();
+
+        document.getElementById("profile").textContent =
+            `Welcome, ${user.name} (${user.email})`;
+    } catch (error) {
+        document.getElementById("profile").textContent =
+            "Cannot connect to server.";
+    }
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    window.location.href = "index.html";
+}
+
+loadProfile();
+</script>
+
+</body>
+</html>
