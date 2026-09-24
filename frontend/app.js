@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://login-system-ksim.onrender.com";
 
 const message = document.getElementById("message");
 
